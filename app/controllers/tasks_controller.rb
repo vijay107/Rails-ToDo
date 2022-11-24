@@ -4,8 +4,15 @@ class TasksController < ApplicationController
 
   # GET /tasks or /tasks.json
   def index
-    @tasks = Task.all
-    #@pagy, @tasks = pagy(Task.order(created_at: :desc))
+    @q = Task.ransack(params[:q])
+    @tasks =Task.all
+    if params[:q].present?
+      if params[:q][:deadline_cont].present?
+        params[:q][:deadline_cont] = params[:q][:deadline_cont].to_date
+      end
+      @tasks = @q.result(distict: true)
+    end
+    @pagy, @tasks = pagy(@tasks.order(created_at: :desc))
   end
 
   # GET /tasks/1 or /tasks/1.json

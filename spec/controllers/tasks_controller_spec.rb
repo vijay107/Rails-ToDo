@@ -66,13 +66,11 @@ RSpec.describe TasksController, type: :controller do
 
     context 'PUT#update' do
         it 'with valid params should update task' do
-            binding.pry
             expect do
                 put(:update, params: {id: Task.first.id, task: valid_create_attributes})
             end.to change { Task.all.count }.by(0)
             
             expect(Task.first.task_name).to eq(valid_create_attributes[:task_name])
-            binding.pry
             expect(response).to have_http_status(302)
             expect(response).to redirect_to(task_path(Task.first))   
         end
