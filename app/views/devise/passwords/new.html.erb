@@ -1,0 +1,38 @@
+
+<%= stylesheet_link_tag "forms.css" %>
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <div class="mb-md-5 mt-md-4">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Forgot your password?</h2>
+                <p>Password Details will be shared on this email</p>
+                <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+                  <%= render "devise/shared/error_messages", resource: resource %>
+                  
+                  <div class="form-outline form-white mb-4">
+                    <%= f.label :email , class:"form-label" %><br />
+                    <%= f.email_field :email, autofocus: true, autocomplete: "email" , class:"form-control form-control-lg"%>
+                  </div>
+
+                  <%= f.submit "Send", class: "btn btn-outline-light btn-lg px-5" %>
+                  
+                  <h4 style="margin-top:20px;">or<h4>
+                  <div class="d-flex flex-row justify-content-center" style="margin-top:20px;">
+                    <div class="p-3"><%= link_to "LOG IN", new_user_session_path, class: "btn btn-primary" %></div>
+                    <div class="p-3"><%= link_to "SIGN UP", new_user_registration_path , class: "btn btn-primary" %></div>
+                  </div>
+
+                <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

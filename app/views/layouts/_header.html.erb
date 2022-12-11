@@ -1,18 +1,44 @@
 <nav class="  navbar navbar-expand-lg navbar-dark bg-dark">
+
     <div>
-    <%= link_to 'ToDO', tasks_path, class: "fs-2 m-3 navbar_brand fw-bold text-success text-decoration-none" %>
+      <%= link_to 'ToDO', tasks_path, class: "fs-2 m-3 navbar_brand fw-bold text-success text-decoration-none" %>
     </div>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse pr-3" style="justify-content: space-between; margin-right: 20px;" id="navbarNavDropdown">
+
       <ul class="navbar-nav">
-        <li class="nav-item m-3">
-          <%= link_to 'My tasks' , tasks_path, class: "nav_link text-decoration-none text-warning" %>
-        </li>
-        <li class="nav-item m-3">
-          <%= link_to 'Add task' , new_task_path, class: "nav_link text-decoration-none text-warning" %>
-        </li>
+
+        <% if user_signed_in? %>
+          <li class="nav-item m-3">
+            <%= link_to 'My tasks' , tasks_path, class: "nav_link text-decoration-none text-warning" %>
+          </li>
+
+          <li class="nav-item m-3">
+            <%= link_to 'Add task' , new_task_path, class: "nav_link text-decoration-none text-warning" %>
+          </li>
+
+          <li class="nav-item m-3">
+            <%= link_to 'Edit profile' , edit_user_registration_path, class: "nav_link text-decoration-none text-warning" %>
+          </li>
+
+          <li class="nav-item m-3">
+            <%= link_to 'Log out' , destroy_user_session_path, method: :delete, style: "margin-left:1260px;font-weight:bold;font-size:18px;", class: "nav_link text-decoration-none text-warning", onclick: "return confirm('Are you sure you want to Log out?');", data: {confirm: 'Are you sure?'}%>
+          </li>
+
+        <% end %>
+
       </ul>
+
     </div>
+
 </nav>
+
+<script>
+  function myFunction() {
+    alert("are you sure, you want to log out?")
+}
+</script>
