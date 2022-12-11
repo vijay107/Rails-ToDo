@@ -3,6 +3,22 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.0"
 
+#user authentictions\
+gem 'devise', '~> 4.8', '>= 4.8.1'
+
+#for filter
+gem 'ransack'
+
+#for jquery
+gem 'jquery-rails', '~> 4.4'
+gem "jquery-ui-rails"
+gem 'turbolinks'
+gem 'coffee-rails'
+gem 'popper_js', '~> 1.9', '>= 1.9.9'
+
+#Use Webpack to manage app-like JavaScript modules in Rails
+gem 'webpacker'
+
 #for testing
 gem "factory_bot_rails"
 gem "faker"
