@@ -1,5 +1,8 @@
 <% if user_signed_in?%>
   <%= render 'layouts/header' %>
+
+  <!-- <%= render_breadcrumbs %> -->
+  
   <div class="container">
         <% if notice %>
           <%= render 'layouts/alerts' %>  <!-- partial -->

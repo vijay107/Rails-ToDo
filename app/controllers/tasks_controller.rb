@@ -2,8 +2,11 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
 
+  add_breadcrumb "Tasks", :root_path
+
   # GET /tasks or /tasks.json
   def index
+    add_breadcrumb "index" , tasks_path
     @q = Task.ransack(params[:q])
     @tasks =Task.all
     if params[:q].present?
@@ -13,20 +16,26 @@ class TasksController < ApplicationController
       @tasks = @q.result(distict: true)
     end
     @pagy, @tasks = pagy(@tasks.order(created_at: :desc))
+
   end
 
   # GET /tasks/1 or /tasks/1.json
   def show
-    #binding.pry
+    add_breadcrumb "index" , tasks_path
+    add_breadcrumb "show" , task_path(@task)
   end
 
   # GET /tasks/new
   def new
+    add_breadcrumb "index" , tasks_path
+    add_breadcrumb "new" , new_task_path
     @task = Task.new
   end
 
   # GET /tasks/1/edit
   def edit
+    add_breadcrumb "index" , tasks_path
+    add_breadcrumb "edit" , edit_task_path(@task)
   end
 
   # POST /tasks or /tasks.json
