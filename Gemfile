@@ -3,8 +3,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.0"
 
-#user authentictions\
+#user authentictions
 gem 'devise', '~> 4.8', '>= 4.8.1'
+
+#To add links of pages i.e Creating navigation menu (uncomment breadcrumb changes in views to see how it works) 
+#it is helpful in navigating through multple pages or actions
+gem "breadcrumbs_on_rails"
 
 #for filter
 gem 'ransack'
