@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+    # commit 1 for bug 1
     require "active_support/core_ext"
     validates :task_name, :task_description, presence: true
     validates :task_name, :task_description, :uniqueness => true
