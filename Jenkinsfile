@@ -1,13 +1,6 @@
 // Jenkins deployment pipeline that runs the Frappe-side merge gate before
-// touching production. Mirrors the JiraAPI-driven pipeline you had earlier.
-//
-// Setup checklist:
-//   - Frappe creds added in Jenkins under credential ID `frappe-api`
-//   - The ngrok / public URL of Frappe is pinned in FRAPPE_HOST below
-//   - The pipeline job is configured with a "String" parameter named ISSUES
-//     (comma-separated list, e.g. "TP-11,TP-12") and a "Boolean" parameter
-//     BLANK_DEPLOY (defaults false)
-//
+// touching production. Uses native Groovy JSON (no extra plugins required).
+
 pipeline {
 	agent any
 
@@ -24,6 +17,7 @@ pipeline {
 	stages {
 		stage("Validate merge gate") {
 			steps {
+				sh "python3 -m pip install --user --quiet requests || true"
 				script {
 					def issues = params.ISSUES.split(",").collect { it.trim() }.findAll { it }
 					def reqJson = groovy.json.JsonOutput.toJson([
@@ -39,15 +33,15 @@ pipeline {
 					)]) {
 						def out = sh(
 							returnStdout: true,
-							script: "python3 ci/frappe_api.py validate '${reqJson}'",
+							script: "python3 ci/frappe_api.py validate '${reqJson}' 2>&1 | grep -E '^\\{' | tail -1",
 						).trim()
 						echo "Validation response: ${out}"
-						def parsed = readJSON text: out
+						def parsed = new groovy.json.JsonSlurper().parseText(out)
 						if (parsed.errored) {
 							error "Merge gate failed: ${parsed.payload}"
 						}
 						env.PR_LIST = parsed.payload.join(" ")
-						env.TARGET_BRANCH = parsed.target_branch
+						env.TARGET_BRANCH = parsed.target_branch ?: ""
 						echo "Approved PRs: ${env.PR_LIST}"
 						echo "Target branch: ${env.TARGET_BRANCH}"
 					}
@@ -63,9 +57,9 @@ pipeline {
 
 		stage("Run deploy") {
 			steps {
-				echo "==> Pretend-merging ${env.PR_LIST} into ${env.TARGET_BRANCH}"
-				echo "==> Run your real merge / build / push commands here."
-				// Real example:
+				echo "==> Pretend-merging ${env.PR_LIST} into ${env.TARGET_BRANCH ?: '(no target set)'}"
+				echo "==> Plug in your real merge / build / push commands here."
+				// Example:
 				//   sh "git fetch origin"
 				//   sh "git checkout ${env.TARGET_BRANCH}"
 				//   for (pr in env.PR_LIST.split(" ")) { sh "gh pr merge ${pr} --merge" }
