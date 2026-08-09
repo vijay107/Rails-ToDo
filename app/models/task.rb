@@ -1,3 +1,4 @@
+## 1
 class Task < ApplicationRecord
     require "active_support/core_ext"
     validates :task_name, :task_description, presence: true
